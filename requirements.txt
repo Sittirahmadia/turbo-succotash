@@ -1,0 +1,51 @@
+# NEON VOID OPTIMIZER - Core Dependencies
+# Python 3.11+ required
+
+# GUI Framework
+dearpygui==1.10.1
+
+# 3D Rendering & OpenGL
+moderngl==5.8.2
+glfw==2.6.3
+PyGLM==2.7.0
+Pillow==10.1.0
+
+# System & Hardware Monitoring
+psutil==5.9.6
+GPUtil==1.4.0
+pywin32==306
+py-cpuinfo==9.0.0
+wmi==1.5.1; platform_system == "Windows"
+
+# Audio
+sounddevice==0.4.6
+pyaudio==0.2.14
+pycaw==20230407; platform_system == "Windows"
+
+# AI / Machine Learning
+scikit-learn==1.3.2
+joblib==1.3.2
+numpy==1.26.2
+pandas==2.1.3
+
+# Network & Web
+requests==2.31.0
+urllib3==2.1.0
+dnspython==2.4.2
+pythonping==1.1.4
+scapy==2.5.0; platform_system == "Windows"
+
+# Data & Serialization
+orjson==3.9.10
+
+# Utilities
+click==8.1.7
+colorama==0.4.6
+tqdm==4.66.1
+
+# Build & Packaging
+pyinstaller==6.2.0
+
+# Windows-specific
+pyuac==0.0.3; platform_system == "Windows"
+winregistry==1.1.1; platform_system == "Windows"

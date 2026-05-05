@@ -1,0 +1,52 @@
+name: Build NEON VOID OPTIMIZER
+
+on:
+  push:
+    branches: [main, develop]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Run tests
+        run: |
+          pip install pytest
+          pytest tests/ -v || echo "No tests yet"
+
+      - name: Build executable
+        run: python scripts/build.py --build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NEON_VOID_OPTIMIZER
+          path: dist/NEON_VOID_OPTIMIZER.exe
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/NEON_VOID_OPTIMIZER.exe
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          

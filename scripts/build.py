@@ -12,18 +12,35 @@ from pathlib import Path
 
 def create_spec_file() -> str:
     """Create PyInstaller spec file with proper configuration."""
-    spec_content = """
+    # Get absolute paths to project root and source
+    # This script is in project_root/scripts/build.py
+    root_dir = Path(__file__).parent.parent.absolute()
+    src_dir = (root_dir / "src").absolute()
+    
+    # Define paths
+    main_py = (src_dir / "neon_void" / "__main__.py").as_posix()
+    src_path = src_dir.as_posix()
+    assets_dir = (src_dir / "neon_void" / "assets").as_posix()
+    config_dir = (root_dir / "config").as_posix()
+    icon_path = (src_dir / "neon_void" / "assets" / "images" / "icon.ico").as_posix()
+
+    # Ensure directories exist to avoid PyInstaller errors
+    os.makedirs(assets_dir, exist_ok=True)
+    os.makedirs(config_dir, exist_ok=True)
+    os.makedirs(os.path.dirname(icon_path), exist_ok=True)
+
+    spec_content = f"""
 # -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
 
 a = Analysis(
-    ['../src/neon_void/__main__.py'],
-    pathex=['../src'],
+    ['{main_py}'],
+    pathex=['{src_path}'],
     binaries=[],
     datas=[
-        ('../src/neon_void/assets', 'neon_void/assets'),
-        ('../config', 'config'),
+        ('{assets_dir}', 'neon_void/assets'),
+        ('{config_dir}', 'config'),
     ],
     hiddenimports=[
         'sklearn',
@@ -44,7 +61,7 @@ a = Analysis(
         'comtypes',
     ],
     hookspath=[],
-    hooksconfig={},
+    hooksconfig={{}},
     runtime_hooks=[],
     excludes=[],
     win_no_prefer_redirects=False,
@@ -75,7 +92,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='../src/neon_void/assets/images/icon.ico',
+    icon='{icon_path}' if os.path.exists('{icon_path}') else None,
     # Admin manifest
     uac_admin=True,
 )
